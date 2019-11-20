@@ -79,12 +79,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.qaprosoft.zafira.models.db.Status.ABORTED;
+import static com.qaprosoft.zafira.models.db.Status.BLOCKED;
 import static com.qaprosoft.zafira.models.db.Status.FAILED;
 import static com.qaprosoft.zafira.models.db.Status.IN_PROGRESS;
 import static com.qaprosoft.zafira.models.db.Status.PASSED;
 import static com.qaprosoft.zafira.models.db.Status.QUEUED;
 import static com.qaprosoft.zafira.models.db.Status.SKIPPED;
 import static com.qaprosoft.zafira.service.FilterService.Template.TEST_RUN_TEMPLATE;
+import static com.qaprosoft.zafira.service.exception.IllegalOperationException.IllegalOperationErrorDetail.TEST_RUN_BLOCKING_NOT_POSSIBLE;
 import static com.qaprosoft.zafira.service.exception.IllegalOperationException.IllegalOperationErrorDetail.TEST_RUN_CAN_NOT_BE_STARTED;
 import static com.qaprosoft.zafira.service.exception.ResourceNotFoundException.ResourceNotFoundErrorDetail.TEST_RUN_NOT_FOUND;
 import static com.qaprosoft.zafira.service.util.XmlConfigurationUtil.readArguments;
@@ -100,6 +102,7 @@ public class TestRunService implements ProjectReassignable {
     private static final String ERR_MSG_INVALID_TEST_RUN_INITIATED_BY_HUMAN = "Username is not specified for test run initiated by HUMAN";
     private static final String ERR_MSG_INVALID_TEST_RUN_INITIATED_BY_UPSTREAM_JOB = "Upstream job id and upstream build number are not specified for test run initiated by UPSTREAM_JOB";
     private static final String ERR_MSG_TEST_RUN_NOT_FOUND_BY_CI_RUN_ID = "Test run for CI run id %s can not be found";
+    private static final String ERR_MSG_TEST_RUN_BLOCKING_OPERATION_NOT_POSSIBLE = "Test run with id '%d' cannot be blocked with status '%s'";
 
     @Autowired
     private TestRunMapper testRunMapper;
@@ -343,7 +346,7 @@ public class TestRunService implements ProjectReassignable {
                 }
             } else {
                 setMinimalQueuedTestRunData(testRun, testRunParams);
-                updateTestRun(testRun);
+                testRun = updateTestRun(testRun);
             }
         }
         return testRun;
@@ -390,6 +393,34 @@ public class TestRunService implements ProjectReassignable {
         testRun.setStatus(QUEUED);
         testRun.setStartedAt(Calendar.getInstance().getTime());
         testRun.setBuildNumber(Integer.valueOf(testRunParams.getBuildNumber()));
+    }
+
+    @Transactional()
+    public TestRun blockTestRun(Long id, String blockCause) {
+        TestRun testRun = getTestRunById(id);
+        if (testRun == null) {
+            throw new ResourceNotFoundException(TEST_RUN_NOT_FOUND, ERR_MSG_TEST_RUN_NOT_FOUND, id);
+        }
+        if (!isBlockPossibleByStatus(testRun.getStatus())) {
+            throw new IllegalOperationException(TEST_RUN_BLOCKING_NOT_POSSIBLE, String.format(ERR_MSG_TEST_RUN_BLOCKING_OPERATION_NOT_POSSIBLE, id, testRun.getStatus()));
+        }
+        List<Test> tests = testService.getTestsByTestRunId(id);
+        tests.stream()
+             .filter(test -> isBlockPossibleByStatus(test.getStatus()))
+             .forEach(this::blockTest);
+
+        testRun.setStatus(BLOCKED);
+        testRun.setComments(blockCause);
+        return updateTestRun(testRun);
+    }
+
+    private boolean isBlockPossibleByStatus(Status status) {
+        return Arrays.asList(IN_PROGRESS, QUEUED).contains(status);
+    }
+
+    private void blockTest(Test test) {
+        test.setStatus(BLOCKED);
+        testService.updateTest(test);
     }
 
     @Transactional(rollbackFor = Exception.class)

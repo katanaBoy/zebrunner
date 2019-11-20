@@ -167,11 +167,20 @@ public class TestRunController extends AbstractController {
     }
 
     @ApiResponseStatuses
-    @ApiOperation(value = "Create queued testRun", nickname = "queueTestRun", httpMethod = "POST", response = List.class)
+    @ApiOperation(value = "Create queued testRun", nickname = "queueTestRun", httpMethod = "POST", response = TestRunType.class)
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", paramType = "header") })
     @PostMapping("/queue")
     public TestRunType createQueuedTestRun(@RequestBody QueueTestRunParamsType queuedTestRunParams) {
         TestRun testRun = testRunService.queueTestRun(queuedTestRunParams, getPrincipalId());
+        return mapper.map(testRun, TestRunType.class);
+    }
+
+    @ApiResponseStatuses
+    @ApiOperation(value = "Block test run", nickname = "blockTestRun", httpMethod = "POST", response = TestRunType.class)
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", paramType = "header") })
+    @PostMapping("/{id}/block")
+    public TestRunType blockTestRun(@PathVariable("id") Long id, @RequestBody String blockCause) {
+        TestRun testRun = testRunService.blockTestRun(id, blockCause);
         return mapper.map(testRun, TestRunType.class);
     }
 

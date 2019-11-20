@@ -72,6 +72,7 @@ public class TestRun extends AbstractEntity {
     private Integer inProgress;
     private Integer aborted;
     private Integer queued;
+    private Integer blocked;
     private boolean reviewed;
 
     @Builder

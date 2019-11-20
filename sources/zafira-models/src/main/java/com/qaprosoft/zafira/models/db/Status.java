@@ -22,5 +22,6 @@ public enum Status {
     FAILED,
     SKIPPED,
     ABORTED,
-    QUEUED
+    QUEUED,
+    BLOCKED
 }
