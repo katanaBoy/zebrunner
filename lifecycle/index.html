@@ -296,15 +296,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-refresh-token" title="Step 1: Refresh token" class="md-nav__link">
-    Step 1: Refresh token
+  <a href="#step-1-refresh-a-token" title="Step 1: Refresh a token" class="md-nav__link">
+    Step 1: Refresh a token
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-get-user-profile" title="Step 2: Get user profile" class="md-nav__link">
-    Step 2: Get user profile
+  <a href="#step-2-get-a-user-profile" title="Step 2: Get a user profile" class="md-nav__link">
+    Step 2: Get a user profile
   </a>
   
 </li>
@@ -462,15 +462,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-refresh-token" title="Step 1: Refresh token" class="md-nav__link">
-    Step 1: Refresh token
+  <a href="#step-1-refresh-a-token" title="Step 1: Refresh a token" class="md-nav__link">
+    Step 1: Refresh a token
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-get-user-profile" title="Step 2: Get user profile" class="md-nav__link">
-    Step 2: Get user profile
+  <a href="#step-2-get-a-user-profile" title="Step 2: Get a user profile" class="md-nav__link">
+    Step 2: Get a user profile
   </a>
   
 </li>
@@ -544,12 +544,12 @@
                 
                 
                 <h1 id="lifecycle">Lifecycle</h1>
-<p>Schema below illustrates general test run flow that should be followed for new listeners implmentation:
+<p>The schema below illustrates a general test run flow that should be followed to implement new listeners:
 <p align="center">
   <img width="700px" height="600px" src="../img/lifecycle.png">
 </p></p>
 <hr />
-<h3 id="step-1-refresh-token">Step 1: Refresh token</h3>
+<h3 id="step-1-refresh-a-token">Step 1: Refresh a token</h3>
 <p><strong>POST: /zafira-ws/api/auth/refresh</strong></p>
 <p><strong>Request</strong></p>
 <pre><code class="json">{
@@ -569,7 +569,7 @@
 <tr>
 <td align="center">refreshToken</td>
 <td align="center">String</td>
-<td align="center">token obtained by generation</td>
+<td align="center">Token obtained by generation</td>
 </tr>
 </tbody>
 </table>
@@ -605,7 +605,7 @@
 <tr>
 <td align="center">expiresIn</td>
 <td align="center">int</td>
-<td align="center">Expiration time of new token</td>
+<td align="center">Expiration time of a new token</td>
 </tr>
 <tr>
 <td align="center">refreshToken</td>
@@ -620,7 +620,7 @@
 </tbody>
 </table>
 <hr />
-<h3 id="step-2-get-user-profile">Step 2: Get user profile</h3>
+<h3 id="step-2-get-a-user-profile">Step 2: Get a user profile</h3>
 <p><strong>GET: /zafira-ws/api/users/profile?username={username}</strong></p>
 <p><strong>Headers:</strong> Authorization=Bearer {accessToken}</p>
 <p><strong>Request</strong>
@@ -678,7 +678,7 @@ None</p>
 <tr>
 <td align="center">roles</td>
 <td align="center">String array</td>
-<td align="center">user roles("ROLE_ADMIN", "ROLE_ADMIN", "ROLE_SUPERADMIN")</td>
+<td align="center">User roles ("ROLE_ADMIN", "ROLE_ADMIN", "ROLE_SUPERADMIN")</td>
 </tr>
 <tr>
 <td align="center">permissions</td>
@@ -693,7 +693,7 @@ None</p>
 <tr>
 <td align="center">lastLogin</td>
 <td align="center">Date</td>
-<td align="center">Date of users last login</td>
+<td align="center">Date of a user's last login</td>
 </tr>
 <tr>
 <td align="center">source</td>
@@ -703,7 +703,7 @@ None</p>
 <tr>
 <td align="center">status</td>
 <td align="center">Object</td>
-<td align="center">Logged in or not("ACTIVE","INACTIVE")</td>
+<td align="center">Logged in or not ("ACTIVE","INACTIVE")</td>
 </tr>
 </tbody>
 </table>
@@ -915,7 +915,7 @@ None</p>
 <tr>
 <td align="center">startedBy</td>
 <td align="center">String</td>
-<td align="center">One of the values : "SCHEDULER", "UPSTREAM_JOB", "HUMAN"</td>
+<td align="center">One of the values: "SCHEDULER", "UPSTREAM_JOB", "HUMAN"</td>
 </tr>
 </tbody>
 </table>
@@ -976,7 +976,7 @@ None</p>
 <tr>
 <td align="center">knownIssue</td>
 <td align="center">bool</td>
-<td align="center">Failing reason in ticket</td>
+<td align="center">Failing reason in a ticket</td>
 </tr>
 <tr>
 <td align="center">reviewed</td>
@@ -1015,17 +1015,17 @@ None</p>
 <tr>
 <td align="center">primaryOwnerId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case creator</td>
+<td align="center">Unique identifier of a test case creator</td>
 </tr>
 <tr>
 <td align="center">testClass</td>
 <td align="center">String</td>
-<td align="center">Name of test class</td>
+<td align="center">Name of the test class</td>
 </tr>
 <tr>
 <td align="center">testMethod</td>
 <td align="center">String</td>
-<td align="center">Name of test method</td>
+<td align="center">Name of the test method</td>
 </tr>
 <tr>
 <td align="center">testSuiteId</td>
@@ -1056,22 +1056,22 @@ None</p>
 <tr>
 <td align="center">id</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case</td>
+<td align="center">Unique identifier of a test case</td>
 </tr>
 <tr>
 <td align="center">primaryOwnerId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case creator</td>
+<td align="center">Unique identifier of a test case creator</td>
 </tr>
 <tr>
 <td align="center">testClass</td>
 <td align="center">String</td>
-<td align="center">Name of test class</td>
+<td align="center">Name of the test class</td>
 </tr>
 <tr>
 <td align="center">testMethod</td>
 <td align="center">String</td>
-<td align="center">Name of test method</td>
+<td align="center">Name of the test method</td>
 </tr>
 <tr>
 <td align="center">testSuiteId</td>
@@ -1110,7 +1110,7 @@ None</p>
 <tr>
 <td align="center">testCaseId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case</td>
+<td align="center">Unique identifier of a test case</td>
 </tr>
 <tr>
 <td align="center">name</td>
@@ -1171,17 +1171,17 @@ None</p>
 <tr>
 <td align="center">testCaseId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case</td>
+<td align="center">Unique identifier of a test case</td>
 </tr>
 <tr>
 <td align="center">retry</td>
 <td align="center">int</td>
-<td align="center">Shows the count the test ran</td>
+<td align="center">Shows the count a test ran</td>
 </tr>
 <tr>
 <td align="center">knownIssue</td>
 <td align="center">bool</td>
-<td align="center">Failing reason in ticket</td>
+<td align="center">Failing reason in a ticket</td>
 </tr>
 <tr>
 <td align="center">blocker</td>
@@ -1191,12 +1191,12 @@ None</p>
 <tr>
 <td align="center">needRerun</td>
 <td align="center">bool</td>
-<td align="center">Flag that indicates whether a reran is needed</td>
+<td align="center">Flag that indicates whether a rerun is needed</td>
 </tr>
 <tr>
 <td align="center">artifacts</td>
 <td align="center">Object array</td>
-<td align="center">List of test artifacts(logs, screenshots etc)</td>
+<td align="center">List of test artifacts (logs, screenshots etc)</td>
 </tr>
 </tbody>
 </table>
@@ -1251,17 +1251,17 @@ None</p>
 <tr>
 <td align="center">testCaseId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case</td>
+<td align="center">Unique identifier of a test case</td>
 </tr>
 <tr>
 <td align="center">retry</td>
 <td align="center">int</td>
-<td align="center">Shows the count the test ran</td>
+<td align="center">Shows the count a test ran</td>
 </tr>
 <tr>
 <td align="center">knownIssue</td>
 <td align="center">bool</td>
-<td align="center">Failing reason in ticket</td>
+<td align="center">Failing reason in a ticket</td>
 </tr>
 <tr>
 <td align="center">blocker</td>
@@ -1271,12 +1271,12 @@ None</p>
 <tr>
 <td align="center">needRerun</td>
 <td align="center">bool</td>
-<td align="center">Flag that indicates whether a reran is needed</td>
+<td align="center">Flag that indicates whether a rerun is needed</td>
 </tr>
 <tr>
 <td align="center">artifacts</td>
 <td align="center">Object array</td>
-<td align="center">List of test artifacts(logs, screenshots etc)</td>
+<td align="center">List of test artifacts (logs, screenshots etc)</td>
 </tr>
 </tbody>
 </table>
@@ -1327,17 +1327,17 @@ None</p>
 <tr>
 <td align="center">testCaseId</td>
 <td align="center">int</td>
-<td align="center">Unique identifier of test case</td>
+<td align="center">Unique identifier of a test case</td>
 </tr>
 <tr>
 <td align="center">retry</td>
 <td align="center">int</td>
-<td align="center">Shows the count the test ran</td>
+<td align="center">Shows the count a test ran</td>
 </tr>
 <tr>
 <td align="center">knownIssue</td>
 <td align="center">bool</td>
-<td align="center">Failing reason in ticket</td>
+<td align="center">Failing reason in a ticket</td>
 </tr>
 <tr>
 <td align="center">blocker</td>
@@ -1347,12 +1347,12 @@ None</p>
 <tr>
 <td align="center">needRerun</td>
 <td align="center">bool</td>
-<td align="center">Flag that indicates whether a reran is needed</td>
+<td align="center">Flag that indicates whether a rerun is needed</td>
 </tr>
 <tr>
 <td align="center">artifacts</td>
 <td align="center">Object array</td>
-<td align="center">List of test artifacts(logs, screenshots etc)</td>
+<td align="center">List of test artifacts (logs, screenshots etc)</td>
 </tr>
 </tbody>
 </table>
@@ -1419,12 +1419,12 @@ None</p>
 <tr>
 <td align="center">startedBy</td>
 <td align="center">String</td>
-<td align="center">One of the values : "SCHEDULER", "UPSTREAM_JOB", "HUMAN"</td>
+<td align="center">One of the values: "SCHEDULER", "UPSTREAM_JOB", "HUMAN"</td>
 </tr>
 <tr>
 <td align="center">knownIssue</td>
 <td align="center">bool</td>
-<td align="center">Failing reason in ticket</td>
+<td align="center">Failing reason in a ticket</td>
 </tr>
 <tr>
 <td align="center">blocker</td>
