@@ -272,8 +272,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prerequesties" title="Prerequesties" class="md-nav__link">
-    Prerequesties
+  <a href="#prerequisites" title="Prerequisites" class="md-nav__link">
+    Prerequisites
   </a>
   
 </li>
@@ -413,8 +413,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prerequesties" title="Prerequesties" class="md-nav__link">
-    Prerequesties
+  <a href="#prerequisites" title="Prerequisites" class="md-nav__link">
+    Prerequisites
   </a>
   
 </li>
@@ -446,13 +446,13 @@
                 
                 
                 <h1 id="getting-started">Getting started</h1>
-<h4 id="prerequesties">Prerequesties</h4>
-<p>The easiest way to deploy Zafira is to use <a href="https://docs.docker.com/">Docker</a>. You will find all the details for installation of <a href="https://docs.docker.com/install/">Docker Engine</a> and <a href="https://docs.docker.com/compose/install/">Docker Compose</a> in official documentation. Docker allows to install Zafira on Linux, Mac or Windows. Make sure that you have allocated at least 2 CPUs and 4Gb or RAM for Docker operations.</p>
+<h4 id="prerequisites">Prerequisites</h4>
+<p>The easiest way to deploy Zafira is to use <a href="https://docs.docker.com/">Docker</a>. You will find all the details for installation of <a href="https://docs.docker.com/install/">Docker Engine</a> and <a href="https://docs.docker.com/compose/install/">Docker Compose</a> in the official documentation. Docker allows to install Zafira on Linux, Mac or Windows. Make sure that you have allocated at least 2 CPUs and 4Gb or RAM for Docker operations.</p>
 <p align="center">
   <img width="650px" height="550px" src="../img/docker.png">
 </p>
 
-<p>Before running Zafira, verify that following ports are not binded:</p>
+<p>Before running Zafira, verify that the following ports are not binded:</p>
 <ul>
 <li>8080  (Tomcat)</li>
 <li>5433  (PostgresDB)</li>
@@ -471,7 +471,7 @@
 </code></pre>
 
 <ul>
-<li>If you are planning to access Zafira remotely you will need to modify <strong>docker-compose.yml</strong> specifying appropriate IP address of your host:</li>
+<li>If you are planning to access Zafira remotely, you will need to modify <strong>docker-compose.yml</strong> specifying the appropriate IP address of your host:</li>
 </ul>
 <pre><code>environment:
   - ZAFIRA_URL=http://localhost:8080
