@@ -90,7 +90,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../#user-groups" tabindex="1" class="md-skip">
+      <a href="../#users-groups-invitations-admin-only" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -388,8 +388,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#user-groups" title="User groups" class="md-nav__link">
-    User groups
+  <a href="#users-groups-invitations-admin-only" title="Users - Groups - Invitations (admin only)" class="md-nav__link">
+    Users - Groups - Invitations (admin only)
   </a>
   
 </li>
@@ -448,8 +448,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#user-groups" title="User groups" class="md-nav__link">
-    User groups
+  <a href="#users-groups-invitations-admin-only" title="Users - Groups - Invitations (admin only)" class="md-nav__link">
+    Users - Groups - Invitations (admin only)
   </a>
   
 </li>
@@ -475,7 +475,86 @@
                 
                   <h1>User groups</h1>
                 
-                <h2 id="user-groups">User groups</h2>
+                <h3 id="users-groups-invitations-admin-only">Users - Groups - Invitations (admin only)</h3>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-1.png?raw=true" /></p>
+<p>“Users” tab accumulates all the users registered in one project.</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-2.png?raw=true" /></p>
+<p>The table of users consists of the following fields:
+<em> ID (the index number of the user - the number is assigned to a user by the order of registration).
+</em> Username (can it be changed?)
+<em> E-mail (the one that was used to register in the system)
+</em> First/Last name (editable through settings via admin or user)
+<em> Status (Active/Pending/???)
+</em> Source (Internal/LDAP)
+* Registration date + The time of the last successful login</p>
+<p>The search is available through all of the above-mentioned fields.</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-3.png?raw=true" /></p>
+<p>More options menu ⋮</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-4.png?raw=true" /></p>
+<ol>
+<li>Edit profile
+Admin can edit all the profiles within one project. A user can edit their own profile.</li>
+</ol>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-5.png?raw=true" /></p>
+<p>To deactivate a user, click on the corresponding button and confirm your action in the pop-up:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-6.png?raw=true" /></p>
+<ol>
+<li>Change password - not available for users registered via LDAP!</li>
+</ol>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-7.png?raw=true" /></p>
+<p>The password must contain from 5 to 50 characters. To see the password, click on the eye icon and hold it.
+Click “Apply” when finished.</p>
+<ol>
+<li>Performance - redirects to the “Dashboards” page and the “Personal” tab where the performance is displayed: Personal total rate; Total tests (Man-hours); Monthly test implementation progress.</li>
+</ol>
+<p>Creating a new user
+This is one of two ways of registering users in the system (another one is via LDAP integration - flow??)</p>
+<p>Navigate to the “+New user”  button in the upper-right corner of the window:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-8.png?raw=true" /></p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-9.png?raw=true" /></p>
+<p>Username and Password would further be used to log in the system. Note, that username can not be changedю</p>
+<p>Groups (super admins only)</p>
+<p>All the users on a single project are divided into several groups with certain permissions. The groups are admins, super admins, and users.</p>
+<p>Permissions for admins (ROLE_ADMIN):</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-10.png?raw=true" />
+<img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-11.png?raw=true" /></p>
+<p>The permissions for users (ROLE_USER) are practically the same, excluding the Users and Invitations options - they can’t be set for any of users. </p>
+<p>The permissions are set and edited by the space admin/superadmin?? .
+To add a user to any group, just type their username/email in the corresponding field and click enter. The pop-up message in the lower-right corner of the window will appear. </p>
+<p>User "ldapuser" was added to group "Users"</p>
+<p>Deleting a user: click on the X next to the user’s name. Note, that there would be no confirmation pop-ups for these actions.</p>
+<p>User "ldapuser" was deleted from group "Users"</p>
+<p>More options menu ⋮</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-12.png?raw=true" /></p>
+<p>Editing the group
+You will be shown the window above with all the combinations of permissions. Press “Update” button to save the changes. If you click X to exit (or click on the space somewhere within the window) - the window would be closed, the changes you’ve made would not be saved.</p>
+<p>Deleting the group
+Confirm the action in a pop-up:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-13.png?raw=true" /></p>
+<p>Invitations</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-14.png?raw=true" /></p>
+<p>The search is available by email only.</p>
+<p>New users</p>
+<p>There are two types of creating a new user in Zebrunner: internal and via LDAP.
+To invite a new user, press the “+INVITE USER” button in the upper-right corner of the window:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-15.png?raw=true" /></p>
+<p>Define the group and the role for a new user, and enter the email:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-16.png?raw=true" /></p>
+<p>A pop-up message indicates that the email was sent or an error occurred.</p>
+<p>Invitation was sent.</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-17.png?raw=true" /></p>
+<p>The user will be redirected to the credentials page, where it’s necessary to set the username and the password which would later be used for logging in.</p>
+<p>LDAP</p>
+<p>More options menu ⋮</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-18.png?raw=true" /></p>
+<p>Copy link - the link with the access token is copied to clipboard??</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-19.png?raw=true" /></p>
+<p>Resend - the invitation is sent once again. 
+Confirm the action in the pop-up:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-20.png?raw=true" /></p>
+<p>Revoke - the token sent in the invitation is revoked // the user would not be allowed to enter the system.
+ Confirm the action in the pop-up:</p>
+<p><img alt="alt text" src="https://github.com/APGorobets/mkdocks1/blob/master/images/zbrnn-usergroups-21.png?raw=true" /></p>
                 
                   
                 
