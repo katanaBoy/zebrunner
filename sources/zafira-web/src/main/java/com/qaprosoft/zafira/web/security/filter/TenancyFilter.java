@@ -53,23 +53,9 @@ public class TenancyFilter extends GenericFilterBean {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
 
         if (Arrays.stream(EXCLUSIONS).noneMatch(path -> servletRequest.getRequestURI().contains(path))) {
-
+            String tenantName = servletRequest.getHeader("Tenant");
             if (isMultitenant) {
-                String host = servletRequest.getServerName(); // API clients without Origin
-                String origin = servletRequest.getHeader("Origin"); // Web clients has Origin header
-                if (!StringUtils.isEmpty(origin)) {
-                    host = origin.split("//")[1].split(":")[0];
-                }
-                try {
-                    InternetDomainName domain = InternetDomainName.from(host.replaceFirst("www.", ""));
-                    if (!domain.isTopPrivateDomain() && domain.isUnderPublicSuffix()) {
-                        String topDomain = domain.topPrivateDomain().toString();
-                        String subDomain = domain.toString().replaceAll("." + topDomain, "");
-                        TenancyContext.setTenantName(subDomain);
-                    }
-                } catch (Exception e) {
-                    LOGGER.error(e.getMessage(), e);
-                }
+                TenancyContext.setTenantName(tenantName);
             }
         }
 
