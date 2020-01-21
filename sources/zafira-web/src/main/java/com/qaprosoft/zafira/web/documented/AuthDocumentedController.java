@@ -22,6 +22,7 @@ import com.qaprosoft.zafira.models.dto.auth.EmailDTO;
 import com.qaprosoft.zafira.models.dto.auth.RefreshTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.TenancyInfoDTO;
 import com.qaprosoft.zafira.models.dto.auth.TenantAuth;
+import com.qaprosoft.zafira.models.dto.auth.UserAuthDTO;
 import com.qaprosoft.zafira.models.dto.user.PasswordDTO;
 import com.qaprosoft.zafira.models.dto.user.UserType;
 import io.swagger.annotations.Api;
@@ -77,7 +78,7 @@ public interface AuthDocumentedController {
             @ApiResponse(code = 200, message = "Returns auth token", response = AuthTokenDTO.class),
             @ApiResponse(code = 401, message = "Indicates that user credentials are invalid", response = ResponseEntity.class)
     })
-    AuthTokenDTO login(CredentialsDTO credentialsDTO);
+    UserAuthDTO login(CredentialsDTO credentialsDTO);
 
     @ApiOperation(
             value = "Registers new user in application",
@@ -109,7 +110,7 @@ public interface AuthDocumentedController {
             @ApiResponse(code = 200, message = "Returns new auth token", response = AuthTokenDTO.class),
             @ApiResponse(code = 401, message = "Indicates that token cannot be refreshed", response = ResponseEntity.class)
     })
-    AuthTokenDTO refresh(RefreshTokenDTO refreshToken);
+    UserAuthDTO refresh(RefreshTokenDTO refreshToken);
 
     @ApiOperation(
             value = "Sends reset password email",

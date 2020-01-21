@@ -16,15 +16,16 @@
 package com.qaprosoft.zafira.web;
 
 import com.qaprosoft.zafira.dbaccess.utils.TenancyContext;
+import com.qaprosoft.zafira.models.db.Group;
 import com.qaprosoft.zafira.models.db.Invitation;
 import com.qaprosoft.zafira.models.db.User;
 import com.qaprosoft.zafira.models.dto.auth.AccessTokenDTO;
-import com.qaprosoft.zafira.models.dto.auth.AuthTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.CredentialsDTO;
 import com.qaprosoft.zafira.models.dto.auth.EmailDTO;
 import com.qaprosoft.zafira.models.dto.auth.RefreshTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.TenancyInfoDTO;
 import com.qaprosoft.zafira.models.dto.auth.TenantAuth;
+import com.qaprosoft.zafira.models.dto.auth.UserAuthDTO;
 import com.qaprosoft.zafira.models.dto.user.PasswordDTO;
 import com.qaprosoft.zafira.models.dto.user.UserType;
 import com.qaprosoft.zafira.service.AuthService;
@@ -52,6 +53,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RequestMapping(path = "api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -108,13 +111,12 @@ public class AuthController extends AbstractController implements AuthDocumented
 
     @PostMapping("/login")
     @Override
-    public AuthTokenDTO login(@Valid @RequestBody CredentialsDTO credentialsDTO) {
+    public UserAuthDTO login(@Valid @RequestBody CredentialsDTO credentialsDTO) {
         User user = userService.getUserByUsernameOrEmail(credentialsDTO.getUsername());
         Authentication authentication = authService.getAuthentication(credentialsDTO.getUsername(), credentialsDTO.getPassword(), user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String tenant = TenancyContext.getTenantName();
-        return new AuthTokenDTO("Bearer", jwtService.generateAuthToken(user, tenant),
-                jwtService.generateRefreshToken(user, tenant), jwtService.getExpiration(), tenant);
+        List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
+        return new UserAuthDTO(user.getUsername(), user.getPassword(), groupIds);
     }
 
     @PostMapping("/signup")
@@ -127,12 +129,12 @@ public class AuthController extends AbstractController implements AuthDocumented
 
     @PostMapping("/refresh")
     @Override
-    public AuthTokenDTO refresh(@RequestBody @Valid RefreshTokenDTO refreshToken) {
+    public UserAuthDTO refresh(@RequestBody @Valid RefreshTokenDTO refreshToken) {
         final String tenant = TenancyContext.getTenantName();
         User jwtUser = jwtService.parseRefreshToken(refreshToken.getRefreshToken());
         User user = authService.getAuthenticatedUser(jwtUser, tenant);
-        return new AuthTokenDTO("Bearer", jwtService.generateAuthToken(user, tenant),
-                jwtService.generateRefreshToken(user, tenant), jwtService.getExpiration(), tenant);
+        List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
+        return new UserAuthDTO(user.getUsername(), user.getPassword(), groupIds);
     }
 
     @PostMapping("/password/forgot")
