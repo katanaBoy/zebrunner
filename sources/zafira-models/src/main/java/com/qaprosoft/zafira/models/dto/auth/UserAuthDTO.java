@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,9 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public class UserAuthDTO {
 
+    private Long id;
+
     private String username;
 
     private String password;
 
-    private List<Long> groupIds = new ArrayList<>();
+    private List<Long> groupIds;
 }

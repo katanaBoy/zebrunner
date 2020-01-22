@@ -116,7 +116,7 @@ public class AuthController extends AbstractController implements AuthDocumented
         Authentication authentication = authService.getAuthentication(credentialsDTO.getUsername(), credentialsDTO.getPassword(), user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
-        return new UserAuthDTO(user.getUsername(), user.getPassword(), groupIds);
+        return new UserAuthDTO(user.getId(), user.getUsername(), user.getPassword(), groupIds);
     }
 
     @PostMapping("/signup")
@@ -134,7 +134,7 @@ public class AuthController extends AbstractController implements AuthDocumented
         User jwtUser = jwtService.parseRefreshToken(refreshToken.getRefreshToken());
         User user = authService.getAuthenticatedUser(jwtUser, tenant);
         List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
-        return new UserAuthDTO(user.getUsername(), user.getPassword(), groupIds);
+        return new UserAuthDTO(user.getId(), user.getUsername(), user.getPassword(), groupIds);
     }
 
     @PostMapping("/password/forgot")
