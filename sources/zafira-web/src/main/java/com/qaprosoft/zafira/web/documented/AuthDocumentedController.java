@@ -110,7 +110,7 @@ public interface AuthDocumentedController {
             @ApiResponse(code = 200, message = "Returns new auth token", response = AuthTokenDTO.class),
             @ApiResponse(code = 401, message = "Indicates that token cannot be refreshed", response = ResponseEntity.class)
     })
-    UserAuthDTO refresh(RefreshTokenDTO refreshToken);
+    AuthTokenDTO refresh(RefreshTokenDTO refreshToken);
 
     @ApiOperation(
             value = "Sends reset password email",

@@ -20,6 +20,7 @@ import com.qaprosoft.zafira.models.db.Group;
 import com.qaprosoft.zafira.models.db.Invitation;
 import com.qaprosoft.zafira.models.db.User;
 import com.qaprosoft.zafira.models.dto.auth.AccessTokenDTO;
+import com.qaprosoft.zafira.models.dto.auth.AuthTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.CredentialsDTO;
 import com.qaprosoft.zafira.models.dto.auth.EmailDTO;
 import com.qaprosoft.zafira.models.dto.auth.RefreshTokenDTO;
@@ -129,12 +130,12 @@ public class AuthController extends AbstractController implements AuthDocumented
 
     @PostMapping("/refresh")
     @Override
-    public UserAuthDTO refresh(@RequestBody @Valid RefreshTokenDTO refreshToken) {
+    public AuthTokenDTO refresh(@RequestBody @Valid RefreshTokenDTO refreshToken) {
         final String tenant = TenancyContext.getTenantName();
         User jwtUser = jwtService.parseRefreshToken(refreshToken.getRefreshToken());
         User user = authService.getAuthenticatedUser(jwtUser, tenant);
-        List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
-        return new UserAuthDTO(user.getId(), user.getUsername(), user.getPassword(), groupIds);
+        return new AuthTokenDTO("Bearer", jwtService.generateAuthToken(user, tenant),
+                jwtService.generateRefreshToken(user, tenant), jwtService.getExpiration(), tenant);
     }
 
     @PostMapping("/password/forgot")
