@@ -40,6 +40,7 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
     private static final String[] PUBLIC_API_PATTERNS = new String[] {
             "/api/auth/login",
+            "/api/auth/service/default",
             "/api/config/**",
             "/api/auth/refresh",
             "/api/status/**",
