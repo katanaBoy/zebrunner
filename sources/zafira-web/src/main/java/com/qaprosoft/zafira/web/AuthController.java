@@ -120,6 +120,14 @@ public class AuthController extends AbstractController implements AuthDocumented
         return new UserAuthDTO(user.getId(), user.getUsername(), user.getPassword(), groupIds);
     }
 
+    @PostMapping("/login/external")
+    @Override
+    public UserAuthDTO loginExternal(@Valid @RequestBody User user) {
+        user = authService.retrieveOrCreateExternalUser(user);
+        List<Long> groupIds = user.getGroups().stream().map(Group::getId).collect(Collectors.toList());
+        return new UserAuthDTO(user.getId(), user.getUsername(), user.getPassword(), groupIds);
+    }
+
     @PostMapping("/signup")
     @Override
     public void signup(@RequestHeader("Access-Token") String token, @Valid @RequestBody UserType userType) {

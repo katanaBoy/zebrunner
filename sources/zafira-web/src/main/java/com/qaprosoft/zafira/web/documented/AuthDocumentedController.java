@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web.documented;
 
+import com.qaprosoft.zafira.models.db.User;
 import com.qaprosoft.zafira.models.dto.auth.AccessTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.AuthTokenDTO;
 import com.qaprosoft.zafira.models.dto.auth.CredentialsDTO;
@@ -32,6 +33,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @Api("Auth API")
 public interface AuthDocumentedController {
@@ -79,6 +83,21 @@ public interface AuthDocumentedController {
             @ApiResponse(code = 401, message = "Indicates that user credentials are invalid", response = ResponseEntity.class)
     })
     UserAuthDTO login(CredentialsDTO credentialsDTO);
+
+    @ApiOperation(
+            value = "Creates user if does not exist and generates auth token",
+            notes = "Returns generated auth token, that will be used in authenticated api calls",
+            nickname = "loginExternal",
+            httpMethod = "POST",
+            response = AuthTokenDTO.class
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user", paramType = "body", dataType = "User", required = true, value = "User for authentication")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Returns auth token", response = AuthTokenDTO.class)
+    })
+    UserAuthDTO loginExternal(@Valid @RequestBody User user);
 
     @ApiOperation(
             value = "Registers new user in application",

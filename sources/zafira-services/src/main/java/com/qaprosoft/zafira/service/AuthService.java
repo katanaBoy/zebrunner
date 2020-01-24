@@ -1,5 +1,6 @@
 package com.qaprosoft.zafira.service;
 
+import com.qaprosoft.zafira.models.db.Group;
 import com.qaprosoft.zafira.models.db.User;
 import com.qaprosoft.zafira.service.exception.AuthException;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.qaprosoft.zafira.service.exception.AuthException.AuthErrorDetail.ADMIN_CREDENTIALS_INVALID;
 import static com.qaprosoft.zafira.service.exception.AuthException.AuthErrorDetail.INVALID_USER_CREDENTIALS;
@@ -38,6 +43,15 @@ public class AuthService {
         this.ldapAuthManager = ldapAuthManager;
         this.userService = userService;
         this.adminUsername = adminUsername;
+    }
+
+    @Transactional
+    public User retrieveOrCreateExternalUser(User user) {
+        User dbUser = userService.getUserByUsername(user.getUsername());
+        if (dbUser == null) {
+            dbUser = userService.createOrUpdateUser(user);
+        }
+        return dbUser;
     }
 
     public Authentication getAuthentication(String username, String password, User user) {

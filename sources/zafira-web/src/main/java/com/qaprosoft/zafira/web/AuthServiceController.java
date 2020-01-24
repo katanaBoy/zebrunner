@@ -47,7 +47,7 @@ public class AuthServiceController extends AbstractController implements AuthSer
     public AuthServiceType get() {
         AuthService authService = authServiceService.retrieve();
         AuthServiceType authServiceType = mapper.map(authService, AuthServiceType.class);
-        authServiceType.setSuccessLoginUrl(urlResolver.buildWebURL() + "/signin");
+        authServiceType.setSuccessLoginUrl(urlResolver.buildWebURL() + "login/success");
         return authServiceType;
     }
 
