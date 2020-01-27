@@ -13,4 +13,3 @@ COPY ./sources/zafira-web/build/libs/zafira-web-${version}.jar /app/zafira-servi
 
 CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8002", "-jar", "/app/zafira-service.jar"]
 
-EXPOSE 8080

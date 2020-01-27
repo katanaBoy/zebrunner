@@ -175,6 +175,7 @@ public class PersistenceConfig {
 
         props.put("hibernate.physical_naming_strategy", SpringPhysicalNamingStrategy.class.getName());
         props.put("hibernate.implicit_naming_strategy", SpringImplicitNamingStrategy.class.getName());
+        props.put("hibernate.dialect", org.hibernate.dialect.PostgreSQL82Dialect.class.getName());
 
         Properties properties = new Properties();
         properties.putAll(props);
