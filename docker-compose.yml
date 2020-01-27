@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  gateway:
+    container_name: gateway
+    image: gateway:latest
+    ports:
+      - 8082:8082
+    expose:
+      - 8082
   db:
     container_name: zfr_postgres
     image: qaprosoft/postgres:9.6
