@@ -47,8 +47,9 @@ public class AuthService {
 
     @Transactional
     public User retrieveOrCreateExternalUser(User user) {
-        User dbUser = userService.getUserByUsername(user.getUsername());
+        User dbUser = userService.getUserByEmail(user.getEmail());
         if (dbUser == null) {
+            user.setUsername(user.getEmail());
             dbUser = userService.createOrUpdateUser(user);
         }
         return dbUser;
