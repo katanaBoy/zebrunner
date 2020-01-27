@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web;
 
-import com.qaprosoft.zafira.models.dto.AuthProviderType;
+import com.qaprosoft.zafira.models.dto.AuthProviderDTO;
 import com.qaprosoft.zafira.models.entity.AuthProvider;
 import com.qaprosoft.zafira.service.AuthProviderService;
 import com.qaprosoft.zafira.service.util.URLResolver;
@@ -44,9 +44,9 @@ public class AuthProviderController extends AbstractController implements AuthPr
 
     @GetMapping("/default")
     @Override
-    public AuthProviderType get() {
+    public AuthProviderDTO get() {
         AuthProvider authService = authProviderService.retrieve();
-        AuthProviderType authServiceType = mapper.map(authService, AuthProviderType.class);
+        AuthProviderDTO authServiceType = mapper.map(authService, AuthProviderDTO.class);
         authServiceType.setSuccessLoginUrl(urlResolver.buildWebURL() + "login/success");
         return authServiceType;
     }

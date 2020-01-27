@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web.documented;
 
-import com.qaprosoft.zafira.models.dto.AuthProviderType;
+import com.qaprosoft.zafira.models.dto.AuthProviderDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -29,10 +29,10 @@ public interface AuthProviderDocumentedController {
             notes = "Returns found auth provider or null if internal login supported only",
             nickname = "get",
             httpMethod = "GET",
-            response = AuthProviderType.class
+            response = AuthProviderDTO.class
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns found auth provider or null", response = AuthProviderType.class)
+            @ApiResponse(code = 200, message = "Returns found auth provider or null", response = AuthProviderDTO.class)
     })
-    AuthProviderType get();
+    AuthProviderDTO get();
 }
