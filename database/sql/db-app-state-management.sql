@@ -139,7 +139,7 @@ INSERT INTO databasechangelog(
      'EXECUTED'
  ),
  (
-     '014_auth_service_table',
+     '014_auth_provider_table',
      'brutskov',
      'classpath:db/changelog.yml',
      current_timestamp,

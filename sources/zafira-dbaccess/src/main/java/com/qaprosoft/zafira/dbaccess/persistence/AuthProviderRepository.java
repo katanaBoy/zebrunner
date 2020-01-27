@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.qaprosoft.zafira.models.dto;
+package com.qaprosoft.zafira.dbaccess.persistence;
 
-import com.qaprosoft.zafira.models.entity.AuthService.Name;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.qaprosoft.zafira.models.entity.AuthProvider;
+import org.springframework.data.repository.CrudRepository;
 
-import javax.validation.constraints.NotNull;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class AuthServiceType {
-
-    private Long id;
-
-    @NotNull
-    private Name name;
-    private String clientId;
-    private String clientSecret;
-    private String successLoginUrl;
+public interface AuthProviderRepository extends CrudRepository<AuthProvider, Long> {
 }

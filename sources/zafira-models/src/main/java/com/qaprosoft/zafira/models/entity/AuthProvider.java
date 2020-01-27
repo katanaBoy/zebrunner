@@ -13,10 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.qaprosoft.zafira.dbaccess.persistence;
+package com.qaprosoft.zafira.models.entity;
 
-import com.qaprosoft.zafira.models.entity.AuthService;
-import org.springframework.data.repository.CrudRepository;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public interface AuthServiceRepository extends CrudRepository<AuthService, Long> {
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "auth_provider")
+public class AuthProvider {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private Name name;
+
+    private String clientId;
+    private String clientSecret;
+
+    public enum Name {
+        GITHUB
+    }
 }

@@ -13,38 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.qaprosoft.zafira.models.entity;
+package com.qaprosoft.zafira.models.dto;
 
+import com.qaprosoft.zafira.models.entity.AuthProvider.Name;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@Table(name = "auth_service")
-public class AuthService {
+@AllArgsConstructor
+public class AuthProviderType {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull
     private Name name;
-
     private String clientId;
     private String clientSecret;
-
-    public enum Name {
-        GITHUB
-    }
+    private String successLoginUrl;
 }

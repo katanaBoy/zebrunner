@@ -143,13 +143,13 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
   - changeSet:
-      id: 014_auth_service_table
+      id: 014_auth_provider_table
       validCheckSum: ANY
       labels: stable
       author: brutskov
       changes:
         - sqlFile:
             encoding: utf8
-            path: changeset/014_auth_service_table.sql
+            path: changeset/014_auth_provider_table.sql
             relativeToChangelogFile: true
             splitStatements: false

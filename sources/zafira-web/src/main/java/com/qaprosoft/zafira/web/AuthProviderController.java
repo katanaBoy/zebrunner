@@ -15,11 +15,11 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web;
 
-import com.qaprosoft.zafira.models.dto.AuthServiceType;
-import com.qaprosoft.zafira.models.entity.AuthService;
-import com.qaprosoft.zafira.service.AuthServiceService;
+import com.qaprosoft.zafira.models.dto.AuthProviderType;
+import com.qaprosoft.zafira.models.entity.AuthProvider;
+import com.qaprosoft.zafira.service.AuthProviderService;
 import com.qaprosoft.zafira.service.util.URLResolver;
-import com.qaprosoft.zafira.web.documented.AuthServiceDocumentedController;
+import com.qaprosoft.zafira.web.documented.AuthProviderDocumentedController;
 import org.dozer.Mapper;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,23 +30,23 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping(path = "api/auth/service", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class AuthServiceController extends AbstractController implements AuthServiceDocumentedController {
+public class AuthProviderController extends AbstractController implements AuthProviderDocumentedController {
 
-    private final AuthServiceService authServiceService;
+    private final AuthProviderService authProviderService;
     private final URLResolver urlResolver;
     private final Mapper mapper;
 
-    public AuthServiceController(AuthServiceService authServiceService, URLResolver urlResolver, Mapper mapper) {
-        this.authServiceService = authServiceService;
+    public AuthProviderController(AuthProviderService authProviderService, URLResolver urlResolver, Mapper mapper) {
+        this.authProviderService = authProviderService;
         this.urlResolver = urlResolver;
         this.mapper = mapper;
     }
 
     @GetMapping("/default")
     @Override
-    public AuthServiceType get() {
-        AuthService authService = authServiceService.retrieve();
-        AuthServiceType authServiceType = mapper.map(authService, AuthServiceType.class);
+    public AuthProviderType get() {
+        AuthProvider authService = authProviderService.retrieve();
+        AuthProviderType authServiceType = mapper.map(authService, AuthProviderType.class);
         authServiceType.setSuccessLoginUrl(urlResolver.buildWebURL() + "login/success");
         return authServiceType;
     }
