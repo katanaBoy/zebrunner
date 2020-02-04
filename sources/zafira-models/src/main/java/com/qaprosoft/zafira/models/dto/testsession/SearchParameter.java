@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.qaprosoft.zafira.web.documented;
+package com.qaprosoft.zafira.models.dto.testsession;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.qaprosoft.zafira.models.entity.TestSession;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Api("Health check API")
-public interface ApplicationHealthDocumentedController {
+import java.util.List;
 
-    @ApiOperation(
-            value = "Checks application health",
-            notes = "Returns common information about the application",
-            nickname = "getStatus",
-            httpMethod = "GET",
-            response = String.class
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns common information about the application", response = String.class)
-    })
-    String getStatus();
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class SearchParameter {
 
+    private List<TestSession.Status> statuses;
+    private List<String> platforms;
 }

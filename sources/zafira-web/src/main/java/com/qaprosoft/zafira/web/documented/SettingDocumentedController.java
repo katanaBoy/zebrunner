@@ -15,8 +15,7 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web.documented;
 
-import com.qaprosoft.zafira.models.dto.CertificationType;
-import com.qaprosoft.zafira.models.dto.errors.ErrorResponse;
+import com.qaprosoft.zafira.models.db.Setting;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,25 +23,26 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api("Certification API")
-public interface CertificationDocumentedController {
+import java.util.List;
+
+@Api("Settings API")
+public interface SettingDocumentedController {
 
     @ApiOperation(
-            value = "Searches for certification info by upstream job details",
-            notes = "Returns certification information (screenshots, platforms, correlation id), or null if an elasticsearch client is not initialized",
-            nickname = "getCertificationDetails",
+            value = "Retrieves default integration settings by integration type name",
+            notes = "Will be deprecated soon. Returns integration settings and decrypts encrypted settings. " +
+                    "Works with 'ELASTICSEARCH'(for zafira-ui), 'RABBITMQ'(for zafira-client) and 'ZEBRUNNER'(for zafira-ui) types only",
+            nickname = "getSettingsByTool",
             httpMethod = "GET",
-            response = CertificationType.class
+            response = List.class
     )
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", paramType = "header", required = true, value = "The auth token (Bearer)"),
-            @ApiImplicitParam(name = "upstreamJobId", paramType = "query", dataType = "number", required = true, value = "The upstream job id"),
-            @ApiImplicitParam(name = "upstreamJobBuildNumber", paramType = "query", dataType = "number", required = true, value = "The build number of the upstream job")
+            @ApiImplicitParam(name = "typeName", paramType = "path", dataType = "string", required = true, value = "Integration type name")
     })
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Returns certification details", response = CertificationType.class),
-            @ApiResponse(code = 404, message = "Indicates that the test run cannot be found during the details collection process", response = ErrorResponse.class)
+            @ApiResponse(code = 200, message = "Returns found integration settings", response = List.class)
     })
-    CertificationType getCertificationDetails(Long upstreamJobId, Integer upstreamJobBuildNumber);
+    List<Setting> getSettingsByTool(String typeName);
 
 }

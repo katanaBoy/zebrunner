@@ -24,8 +24,8 @@ import com.qaprosoft.zafira.service.ElasticsearchService;
 import com.qaprosoft.zafira.service.SettingsService;
 import com.qaprosoft.zafira.service.integration.IntegrationService;
 import com.qaprosoft.zafira.service.integration.tool.impl.StorageProviderService;
+import com.qaprosoft.zafira.web.documented.SettingDocumentedController;
 import com.qaprosoft.zafira.web.util.swagger.ApiResponseStatuses;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -42,11 +42,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Api("Settings API")
 @CrossOrigin
 @RestController
 @RequestMapping(path = "api/settings", produces = MediaType.APPLICATION_JSON_VALUE)
-public class SettingsController extends AbstractController {
+public class SettingsController extends AbstractController implements SettingDocumentedController {
 
     private final SettingsService settingsService;
     private final CryptoService cryptoService;
@@ -69,37 +68,46 @@ public class SettingsController extends AbstractController {
         this.storageProviderService = storageProviderService;
     }
 
-    @ApiResponseStatuses
-    @ApiOperation(value = "Get settings by tool", nickname = "getSettingsByTool", httpMethod = "GET", response = List.class)
-    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", paramType = "header") })
     @GetMapping("tool/{tool}")
-    public List<Setting> getSettingsByTool(@PathVariable("tool") String tool) {
+    @Override
+    public List<Setting> getSettingsByTool(@PathVariable("tool") String typeName) {
         // TODO by nsidorevich on 2019-10-09: refactor and remove
-        if (tool.equalsIgnoreCase("ELASTICSEARCH")) {
-            return elasticsearchService.getSettings();
-        } else if (tool.equalsIgnoreCase("RABBITMQ")) {
-            Integration rabbit = integrationService.retrieveDefaultByIntegrationTypeName("RABBITMQ");
-            List<Setting> rabbitSettings =  rabbit.getSettings()
-                         .stream()
-                         .map(setting -> {
-                             if (setting.isEncrypted()) {
-                                 String decryptedValue = cryptoService.decrypt(setting.getValue());
-                                 setting.setValue(decryptedValue);
-                                 setting.setEncrypted(false);
-                             }
-                             return new Setting(setting.getParam().getName(), setting.getValue());
-                         })
-                         .collect(Collectors.toList());
-            rabbitSettings.add(new Setting("RABBITMQ_ENABLED", Boolean.toString(rabbit.isEnabled())));
-
-            return rabbitSettings;
-        } else {
-            throw new RuntimeException(String.format("Unsupported tool %s, this API should not be used for anything but ElasticSearch or Rabbit", tool));
+        List<Setting> settings;
+        switch (typeName.toUpperCase()) {
+            case "ELASTICSEARCH":
+                settings = elasticsearchService.getSettings();
+                break;
+            case "RABBITMQ":
+                settings = collectDecryptedIntegrationSettings("RABBITMQ");
+                break;
+            case "ZEBRUNNER":
+                settings = collectDecryptedIntegrationSettings("ZEBRUNNER");
+                break;
+            default:
+                throw new RuntimeException(String.format("Unsupported tool %s, this API should not be used for anything but ElasticSearch or Rabbit", typeName));
         }
+        return settings;
+    }
+
+    private List<Setting> collectDecryptedIntegrationSettings(String integrationTypeName) {
+        Integration integration = integrationService.retrieveDefaultByIntegrationTypeName(integrationTypeName);
+        List<Setting> settings =  integration.getSettings()
+                                              .stream()
+                                              .map(setting -> {
+                                                  if (setting.isEncrypted()) {
+                                                      String decryptedValue = cryptoService.decrypt(setting.getValue());
+                                                      setting.setValue(decryptedValue);
+                                                      setting.setEncrypted(false);
+                                                  }
+                                                  return new Setting(setting.getParam().getName(), setting.getValue());
+                                              })
+                                              .collect(Collectors.toList());
+        settings.add(new Setting(integrationTypeName + "_ENABLED", Boolean.toString(integration.isEnabled())));
+        return settings;
     }
 
     @ApiResponseStatuses
-    @ApiOperation(value = "Update setting", nickname = "setting", httpMethod = "PUT", response = Setting.class)
+    @ApiOperation(value = "Updates a setting", nickname = "setting", httpMethod = "PUT", response = Setting.class)
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", paramType = "header") })
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping
@@ -108,7 +116,7 @@ public class SettingsController extends AbstractController {
     }
 
     @ApiResponseStatuses
-    @ApiOperation(value = "Get company logo URL", nickname = "getSettingValue", httpMethod = "GET", response = Setting.class)
+    @ApiOperation(value = "Retrieves a company logo URL", nickname = "getSettingValue", httpMethod = "GET", response = Setting.class)
     @GetMapping("companyLogo")
     public Setting getCompanyLogoURL() {
         return settingsService.getSettingByName("COMPANY_LOGO_URL");
@@ -116,7 +124,7 @@ public class SettingsController extends AbstractController {
 
     // TODO by nsidorevich on 2019-10-09: remove this crap
 
-    @ApiOperation(value = "Get amazon session credentials", nickname = "getSessionCredentials", httpMethod = "GET", response = SessionCredentials.class)
+    @ApiOperation(value = "Receives Amazon session credentials", nickname = "getSessionCredentials", httpMethod = "GET", response = SessionCredentials.class)
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", paramType = "header") })
     @GetMapping("amazon/creds")
     public SessionCredentials getSessionCredentials() {
