@@ -145,12 +145,12 @@ INSERT INTO databasechangelog(
      current_timestamp,
      1,
      'EXECUTED'
-  ),
-  (
-      '014_auth_provider_table',
-      'brutskov',
-      'classpath:db/changelog.yml',
-      current_timestamp,
-      1,
-      'EXECUTED'
-  );
+ ),
+ (
+     '015_auth_provider_table',
+     'brutskov',
+     'classpath:db/changelog.yml',
+     current_timestamp,
+     1,
+     'EXECUTED'
+ );
