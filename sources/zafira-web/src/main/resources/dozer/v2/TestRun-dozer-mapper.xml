@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping type="bi-directional" wildcard="false">
+        <class-a>com.qaprosoft.zafira.web.v2.dto.TestRunDTO</class-a>
+        <class-b>com.qaprosoft.zafira.models.db.TestRun</class-b>
+
+        <field>
+            <a>id</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>startedBy</a>
+            <b>startedBy</b>
+        </field>
+        <field>
+            <a>jobId</a>
+            <b>job.id</b>
+        </field>
+        <field>
+            <a>buildNumber</a>
+            <b>buildNumber</b>
+        </field>
+    </mapping>
+</mappings>

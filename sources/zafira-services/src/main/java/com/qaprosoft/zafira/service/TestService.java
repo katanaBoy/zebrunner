@@ -238,9 +238,9 @@ public class TestService {
                         }
                         existingTest.getWorkItems().add(knownIssue);
 
-                        testRunStatisticsService.updateStatistics(test.getTestRunId(), MARK_AS_KNOWN_ISSUE);
+                        testRunStatisticsService.updateStatistics(existingTest.getTestRunId(), MARK_AS_KNOWN_ISSUE);
                         if (existingTest.isBlocker()) {
-                            testRunStatisticsService.updateStatistics(test.getTestRunId(), MARK_AS_BLOCKER);
+                            testRunStatisticsService.updateStatistics(existingTest.getTestRunId(), MARK_AS_BLOCKER);
                         }
                     }
                 }
@@ -349,7 +349,7 @@ public class TestService {
     }
 
     @Transactional(readOnly = true)
-    public Test getTestById(long id) {
+    public Test getTestById(Long id) {
         return testMapper.getTestById(id);
     }
 

@@ -31,7 +31,7 @@ public interface TestMapper {
 
     void addTags(@Param(value = "testId") Long testId, @Param(value = "tags") Set<Tag> tags);
 
-    Test getTestById(long id);
+    Test getTestById(Long id);
 
     List<Test> getTestsByTestRunId(long testRunId);
 
