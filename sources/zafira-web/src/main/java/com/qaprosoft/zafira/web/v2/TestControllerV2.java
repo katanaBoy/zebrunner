@@ -31,6 +31,7 @@ import com.qaprosoft.zafira.service.cache.TestRunStatisticsCacheableService;
 import com.qaprosoft.zafira.service.project.ProjectService;
 import com.qaprosoft.zafira.web.AbstractController;
 import com.qaprosoft.zafira.web.v2.dto.TestDTO;
+import com.qaprosoft.zafira.web.v2.dto.TestResultDTO;
 import org.dozer.Mapper;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -97,8 +98,8 @@ public class TestControllerV2 extends AbstractController {
     }
 
     @PutMapping("/{id}/results")
-    public TestDTO finish(@RequestBody @Valid TestDTO testDTO, @PathVariable("id") long id) {
-        Test test = mapper.map(testDTO, Test.class);
+    public TestDTO finish(@RequestBody @Valid TestResultDTO testResult, @PathVariable("id") long id) {
+        Test test = mapper.map(testResult, Test.class);
         test.setId(id);
 
         test = testService.finishTest(test, null, null);
@@ -107,8 +108,7 @@ public class TestControllerV2 extends AbstractController {
         websocketTemplate.convertAndSend(getStatisticsWebsocketPath(), new TestRunStatisticPush(testRunStatistic));
         websocketTemplate.convertAndSend(getTestsWebsocketPath(test.getTestRunId()), new TestPush(test));
 
-        mapper.map(test, testDTO);
-        return testDTO;
+        return mapper.map(test, TestDTO.class);
     }
 
 }

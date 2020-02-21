@@ -16,7 +16,6 @@
 package com.qaprosoft.zafira.service;
 
 import com.qaprosoft.zafira.dbaccess.dao.mysql.application.TestConfigMapper;
-import com.qaprosoft.zafira.models.db.Test;
 import com.qaprosoft.zafira.models.db.TestConfig;
 import com.qaprosoft.zafira.models.db.TestRun;
 import com.qaprosoft.zafira.models.db.config.Argument;
@@ -47,8 +46,7 @@ public class TestConfigService {
     }
 
     @Transactional
-    public TestConfig createTestConfigForTest(Test test, String testConfigXML) {
-        Long testRunId = test.getTestRunId();
+    public TestConfig createTestConfigForTest(Long testRunId, String testConfigXML) {
         TestRun testRun = testRunService.getTestRunById(testRunId);
         if (testRun == null) {
             throw new ResourceNotFoundException(TEST_RUN_NOT_FOUND, ERR_MSG_TEST_RUN_NOT_FOUND, testRunId);

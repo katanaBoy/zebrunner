@@ -27,4 +27,21 @@
             <b>message</b>
         </field>
     </mapping>
+
+    <mapping type="bi-directional" wildcard="false">
+        <class-a>com.qaprosoft.zafira.web.v2.dto.TestResultDTO</class-a>
+        <class-b>com.qaprosoft.zafira.models.db.Test</class-b>
+        <field>
+            <a>status</a>
+            <b>status</b>
+        </field>
+        <field>
+            <a>message</a>
+            <b>message</b>
+        </field>
+        <field>
+            <a>finishTime</a>
+            <b>finishTime</b>
+        </field>
+    </mapping>
 </mappings>

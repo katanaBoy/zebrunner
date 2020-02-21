@@ -106,7 +106,7 @@ public class TestService {
     @Autowired
     private TestMetricService testMetricService;
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public Test startTest(Test test, List<String> jiraIds, String configXML) {
 
         Test existingTest = getTestById(test.getId());
@@ -124,7 +124,7 @@ public class TestService {
             workItemService.deleteKnownIssuesByTestId(test.getId());
             testArtifactService.deleteTestArtifactsByTestId(test.getId());
         } else {
-            TestConfig config = testConfigService.createTestConfigForTest(test, configXML);
+            TestConfig config = testConfigService.createTestConfigForTest(test.getTestRunId(), configXML);
             test.setTestConfig(config);
 
             boolean isNew = existingTest == null;
@@ -206,7 +206,7 @@ public class TestService {
         createTest(test);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public Test finishTest(Test test, String configXML, Map<String, Long> testMetrics) {
         Test existingTest = getNotNullTestById(test.getId());
 
@@ -258,11 +258,11 @@ public class TestService {
             Set<Tag> tags = saveTags(test.getId(), test.getTags());
             existingTest.setTags(tags);
 
-            TestConfig config = testConfigService.createTestConfigForTest(test, configXML);
+            TestConfig config = testConfigService.createTestConfigForTest(existingTest.getTestRunId(), configXML);
             existingTest.setTestConfig(config);
 
         } catch (Exception e) {
-            LOGGER.error("Test finalization error: " + e.getMessage());
+            LOGGER.error("Test finalization error: " + e.getMessage(), e);
         } finally {
             existingTest.setFinishTime(test.getFinishTime());
             existingTest.setStatus(test.getStatus());
@@ -271,7 +271,7 @@ public class TestService {
             testMapper.updateTest(existingTest);
             testRunStatisticsService.updateStatistics(existingTest.getTestRunId(), existingTest.getStatus());
         }
-        deleteQueuedTest(test);
+        deleteQueuedTest(existingTest);
         testMetricService.createTestMetrics(test.getId(), testMetrics);
         return existingTest;
     }
