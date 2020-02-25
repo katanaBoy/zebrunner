@@ -308,7 +308,7 @@ INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS
 }', true);
 
 
-INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE (%)', 'Pass rate percent with an extra grouping by project, owner, etc.', 'BAR', '<#global IGNORE_TOTAL_PARAMS = ["DEVICE", "APP_VERSION", "LOCALE", "LANGUAGE", "JOB_NAME", "PARENT_JOB", "PARENT_BUILD"] >
+INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE (BAR)', 'Pass rate percent with an extra grouping by project, owner, etc.', 'BAR', '<#global IGNORE_TOTAL_PARAMS = ["DEVICE", "APP_VERSION", "LOCALE", "LANGUAGE", "JOB_NAME", "PARENT_JOB", "PARENT_BUILD"] >
 
 <#global MULTIPLE_VALUES = {
   "LOWER(PLATFORM)": join(PLATFORM),
@@ -948,7 +948,7 @@ INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS
 }', false);
 
 
-INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE TREND', 'Consolidated test status trend with the ability to specify 10+ extra filters and grouping by hours, days, month, etc.', 'LINE', '<#global IGNORE_TOTAL_PARAMS = ["DEVICE", "APP_VERSION", "LOCALE", "LANGUAGE", "JOB_NAME", "PARENT_JOB"] >
+INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE (LINE)', 'Consolidated test status trend with the ability to specify 10+ extra filters and grouping by hours, days, month, etc.', 'LINE', '<#global IGNORE_TOTAL_PARAMS = ["DEVICE", "APP_VERSION", "LOCALE", "LANGUAGE", "JOB_NAME", "PARENT_JOB"] >
 <#global IGNORE_PERSONAL_PARAMS = ["OWNER_USERNAME"] >
 
 <#global MULTIPLE_VALUES = {
@@ -968,7 +968,7 @@ INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS
 }>
 <#global WHERE_MULTIPLE_CLAUSE = generateMultipleWhereClause(MULTIPLE_VALUES) />
 <#global VIEW = getView(PERIOD) />
-<#global GROUP_AND_ORDER_BY = getGroupBy(PERIOD, PARENT_JOB) />
+<#global GROUP_AND_ORDER_BY = getCreatedAt(PERIOD) />
 
 SELECT
     ${GROUP_AND_ORDER_BY} AS "CREATED_AT",
@@ -1024,21 +1024,6 @@ SELECT
  <#if result?length != 0>
   <#local result = " WHERE " + result/>
  </#if>
- <#return result>
-</#function>
-
-<#--
-    Retrieves actual view name by abstract view description
-    @value - abstract view description
-    @return - actual view name
-  -->
-<#function getGroupBy Period, parentJob>
-  <#local result = "" />
-  <#if parentJob != "">
-    <#local result = "UPSTREAM_JOB_BUILD_NUMBER" />
-  <#else>
-    <#local result = getCreatedAt(PERIOD) />
-  </#if>
  <#return result>
 </#function>
 
@@ -1621,7 +1606,7 @@ chart.setOption(option);', '{
 }', false);
 
 
-INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE', 'Consolidated test status information with the ability to specify 10+ extra filters including daily, weekly, monthly, etc period.', 'PIE', '<#global IGNORE_PERSONAL_PARAMS = ["OWNER_USERNAME"] >
+INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, LEGEND_CONFIG, MODIFIED_AT, CREATED_AT, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE (PIE)', 'Consolidated test status information with the ability to specify 10+ extra filters including daily, weekly, monthly, etc period.', 'PIE', '<#global IGNORE_PERSONAL_PARAMS = ["OWNER_USERNAME"] >
 
 <#global MULTIPLE_VALUES = {
   "PROJECT": multiJoin(PROJECT, projects),
@@ -3271,7 +3256,7 @@ INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS
   "BUG": []
 }', false);
 
-INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('MILESTONE DETAILS', 'Consolidated test status trend with the ability to specify 10+ extra filters and grouping by hours, days, month, etc.', 'OTHER','
+INSERT INTO WIDGET_TEMPLATES (NAME, DESCRIPTION, TYPE, SQL, CHART_CONFIG, PARAMS_CONFIG, PARAMS_CONFIG_SAMPLE, HIDDEN) VALUES ('PASS RATE (PIE + LINE)', 'Consolidated test status trend with the ability to specify 10+ extra filters and grouping by hours, days, month, etc.', 'OTHER','
 <#global IGNORE_PERSONAL_PARAMS = ["OWNER_USERNAME"] >
 
 <#global MULTIPLE_VALUES = {
@@ -4055,6 +4040,14 @@ SELECT
     FROM total_view
     ${WHERE_MULTIPLE_CLAUSE}
   GROUP BY 1
+UNION ALL
+SELECT 
+    to_char(created_at, ''YYYY-MM-DD'') as "date",
+    ROUND(sum(passed)*100/sum(total)) AS "value",
+    ''${PASSED_VALUE}'' as "passed"
+    FROM nightly_view
+    ${WHERE_MULTIPLE_CLAUSE}
+  GROUP BY 1 
   ORDER BY 1
 
 
@@ -4240,7 +4233,7 @@ let option = {
 
 chart.setOption(option);', '{
   "PERIOD": {
-    "valuesQuery": "SELECT ''YEAR'' UNION SELECT ''QUARTER'' UNION SELECT ''MONTH'' UNION SELECT DISTINCT to_char(created_at, ''YYYY'') FROM total_view UNION SELECT DISTINCT to_char(created_at, ''YYYY'') || ''-Q'' || to_char(created_at, ''Q'') FROM total_view UNION SELECT DISTINCT to_char(created_at, ''YYYY-MM'') FROM total_view ORDER BY 1 DESC;",
+    "valuesQuery": "SELECT ''YEAR'' UNION ALL SELECT ''QUARTER'' UNION ALL SELECT ''MONTH'' UNION ALL SELECT DISTINCT to_char(created_at, ''YYYY'') FROM total_view UNION ALL SELECT DISTINCT to_char(created_at, ''YYYY'') || ''-Q'' || to_char(created_at, ''Q'') FROM total_view UNION ALL SELECT DISTINCT to_char(created_at, ''YYYY-MM'') FROM total_view UNION SELECT DISTINCT to_char(created_at, ''YYYY-MM'') FROM NIGHTLY_VIEW ORDER BY 1 DESC;",
     "required": true
   },
   "PERSONAL": {
