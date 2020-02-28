@@ -6,7 +6,7 @@
 
 	<insert id="createTest" useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[
-			INSERT INTO TESTS (NAME, STATUS, TEST_ARGS, TEST_RUN_ID, TEST_CASE_ID, TEST_GROUP, MESSAGE, MESSAGE_HASH_CODE, START_TIME, FINISH_TIME, RETRY, TEST_CONFIG_ID, KNOWN_ISSUE, BLOCKER, NEED_RERUN, DEPENDS_ON_METHODS, CI_TEST_ID)
+			INSERT INTO TESTS (NAME, STATUS, TEST_ARGS, TEST_RUN_ID, TEST_CASE_ID, TEST_GROUP, MESSAGE, MESSAGE_HASH_CODE, START_TIME, FINISH_TIME, RETRY, TEST_CONFIG_ID, KNOWN_ISSUE, BLOCKER, NEED_RERUN, DEPENDS_ON_METHODS, CI_TEST_ID, UID)
 			VALUES (
 				#{name},
 			    #{status},
@@ -24,7 +24,8 @@
 			    #{blocker},
 			    #{needRerun},
 			    #{dependsOnMethods},
-			    #{ciTestId}
+			    #{ciTestId},
+			    #{uid}
 			)
 		]]>
 	</insert>

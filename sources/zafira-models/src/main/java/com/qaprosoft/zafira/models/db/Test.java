@@ -33,6 +33,7 @@ public class Test extends AbstractEntity implements Comparable<Test> {
     private static final long serialVersionUID = -915700504693067056L;
 
     private String name;
+    private String uid;
     private Status status;
     private String testArgs;
     private Long testRunId;

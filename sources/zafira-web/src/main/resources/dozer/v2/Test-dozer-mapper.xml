@@ -15,6 +15,10 @@
             <b>name</b>
         </field>
         <field>
+            <a>uid</a>
+            <b>uid</b>
+        </field>
+        <field>
             <a>testRunId</a>
             <b>testRunId</b>
         </field>

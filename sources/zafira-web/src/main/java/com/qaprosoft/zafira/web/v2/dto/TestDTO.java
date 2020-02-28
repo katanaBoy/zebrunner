@@ -29,6 +29,8 @@ public class TestDTO {
     @Positive
     private Long id;
 
+    private String uid;
+
     @NotBlank
     private String name;
 
