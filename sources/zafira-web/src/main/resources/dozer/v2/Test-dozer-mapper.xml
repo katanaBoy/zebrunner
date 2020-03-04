@@ -23,6 +23,10 @@
             <b>testRunId</b>
         </field>
         <field>
+            <a>ownerUsername</a>
+            <b>owner</b>
+        </field>
+        <field>
             <a>status</a>
             <b>status</b>
         </field>

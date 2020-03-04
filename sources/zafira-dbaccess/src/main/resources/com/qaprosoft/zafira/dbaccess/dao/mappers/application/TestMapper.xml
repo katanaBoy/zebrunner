@@ -120,6 +120,7 @@
 				T.NEED_RERUN AS TEST_NEED_RERUN,
 				T.DEPENDS_ON_METHODS AS TEST_DEPENDS_ON_METHODS,
 				T.CI_TEST_ID AS TEST_CI_TEST_ID,
+				T.UID AS TEST_UID,
 				TCU.USERNAME AS TEST_OWNER,
 				SO.USERNAME AS TEST_SECONDARY_OWNER,
 				TCS.TEST_CLASS AS TEST_TEST_CLASS,
@@ -226,6 +227,13 @@
 		<include refid="getTest" />
 		<![CDATA[
 			WHERE T.ID = #{id};
+		]]>
+	</select>
+
+	<select id="getTestByTestRunIdAndUid" resultMap="TestResultMap">
+		<include refid="getTest" />
+		<![CDATA[
+			WHERE T.TEST_RUN_ID = #{testRunId} AND T.UID = #{testUid};
 		]]>
 	</select>
 
@@ -441,6 +449,7 @@
 		<result column="TEST_SECONDARY_OWNER" property="secondaryOwner" />
 		<result column="TEST_TEST_CLASS" property="testClass" />
 		<result column="TEST_CI_TEST_ID" property="ciTestId" />
+		<result column="TEST_UID" property="uid" />
 		<result column="TEST_MODIFIED_AT" property="modifiedAt" />
 		<result column="TEST_CREATED_AT" property="createdAt" />
 

@@ -23,5 +23,9 @@
             <a>buildNumber</a>
             <b>buildNumber</b>
         </field>
+        <field>
+            <a>ciRunId</a>
+            <b>ciRunId</b>
+        </field>
     </mapping>
 </mappings>

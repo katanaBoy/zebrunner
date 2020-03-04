@@ -15,26 +15,21 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web.v2;
 
-import com.qaprosoft.zafira.models.db.Project;
 import com.qaprosoft.zafira.models.db.Test;
 import com.qaprosoft.zafira.models.db.TestCase;
-import com.qaprosoft.zafira.models.db.TestRun;
-import com.qaprosoft.zafira.models.db.User;
 import com.qaprosoft.zafira.models.dto.TestRunStatistics;
 import com.qaprosoft.zafira.models.push.TestPush;
 import com.qaprosoft.zafira.models.push.TestRunStatisticPush;
-import com.qaprosoft.zafira.service.TestCaseService;
-import com.qaprosoft.zafira.service.TestRunService;
 import com.qaprosoft.zafira.service.TestService;
-import com.qaprosoft.zafira.service.UserService;
 import com.qaprosoft.zafira.service.cache.TestRunStatisticsCacheableService;
-import com.qaprosoft.zafira.service.project.ProjectService;
+import com.qaprosoft.zafira.service.v2.TestServiceV2;
 import com.qaprosoft.zafira.web.AbstractController;
 import com.qaprosoft.zafira.web.v2.dto.TestDTO;
 import com.qaprosoft.zafira.web.v2.dto.TestResultDTO;
 import org.dozer.Mapper;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,51 +38,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping(path = "api/v2/tests", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class TestControllerV2 extends AbstractController {
 
-    private final TestCaseService testCaseService;
     private final TestService testService;
-    private final UserService userService;
-    private final TestRunService testRunService;
     private final SimpMessagingTemplate websocketTemplate;
     private final TestRunStatisticsCacheableService statisticsService;
-    private final ProjectService projectService;
+
+    private final TestServiceV2 testServiceV2;
     private final Mapper mapper;
 
-    public TestControllerV2(TestCaseService testCaseService, TestService testService, UserService userService, TestRunService testRunService, SimpMessagingTemplate websocketTemplate, TestRunStatisticsCacheableService statisticsService, ProjectService projectService, Mapper mapper) {
-        this.testCaseService = testCaseService;
+    public TestControllerV2(TestService testService, SimpMessagingTemplate websocketTemplate, TestRunStatisticsCacheableService statisticsService, TestServiceV2 testServiceV2, Mapper mapper) {
         this.testService = testService;
-        this.userService = userService;
-        this.testRunService = testRunService;
         this.websocketTemplate = websocketTemplate;
         this.statisticsService = statisticsService;
-        this.projectService = projectService;
+        this.testServiceV2 = testServiceV2;
         this.mapper = mapper;
     }
 
     @PostMapping
     public TestDTO register(@RequestBody @Valid TestDTO testDTO) {
-
-        User caseOwner = userService.getUserByUsername(testDTO.getOwnerUsername());
-        Project project = projectService.getProjectByName("UNKNOWN");
-        if (caseOwner == null) {
-            caseOwner = userService.getUserByUsername("anonymous");
-        }
-
-        TestRun testRun = testRunService.getNotNullTestRunById(testDTO.getTestRunId());
-
         TestCase testCase = mapper.map(testDTO, TestCase.class);
-        testCase.setPrimaryOwner(caseOwner);
-        testCase.setTestSuiteId(testRun.getTestSuite().getId());
-        testCase.setProject(project);
-        testCase = testCaseService.createOrUpdateCase(testCase, "");
-
         Test test = mapper.map(testDTO, Test.class);
-        test.setTestCaseId(testCase.getId());
-        test = testService.startTest(test, null, null);
+
+        test = testServiceV2.startTest(test, testCase);
 
         TestRunStatistics testRunStatistic = statisticsService.getTestRunStatistic(test.getTestRunId());
         websocketTemplate.convertAndSend(getStatisticsWebsocketPath(), new TestRunStatisticPush(testRunStatistic));
@@ -109,6 +87,15 @@ public class TestControllerV2 extends AbstractController {
         websocketTemplate.convertAndSend(getTestsWebsocketPath(test.getTestRunId()), new TestPush(test));
 
         return mapper.map(test, TestDTO.class);
+    }
+
+    @GetMapping("/{ciRunId}")
+    public List<TestDTO> getByTestRunCiRunId(@PathVariable("ciRunId") String ciRunId) {
+        List<Test> tests = testService.getTestsByTestRunId(ciRunId);
+
+        return tests.stream()
+                    .map(test -> mapper.map(test, TestDTO.class))
+                    .collect(Collectors.toList());
     }
 
 }

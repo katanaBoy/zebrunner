@@ -44,4 +44,6 @@ public class TestRunDTO {
 
     @Positive
     private Integer buildNumber;
+
+    private String ciRunId;
 }
