@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.qaprosoft.zafira.web.v2;
 
+import com.qaprosoft.zafira.models.db.Status;
 import com.qaprosoft.zafira.models.db.Test;
 import com.qaprosoft.zafira.models.db.TestCase;
 import com.qaprosoft.zafira.models.dto.TestRunStatistics;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -90,8 +92,24 @@ public class TestControllerV2 extends AbstractController {
     }
 
     @GetMapping("/{ciRunId}")
-    public List<TestDTO> getByTestRunCiRunId(@PathVariable("ciRunId") String ciRunId) {
+    public List<TestDTO> getByTestsForRerun(
+            @PathVariable("ciRunId") String ciRunId,
+            @RequestParam(name = "tests", required = false) List<Long> testIds,
+            @RequestParam(name = "statuses", required = false) List<Status> statuses
+    ) {
         List<Test> tests = testService.getTestsByTestRunId(ciRunId);
+
+        if (testIds != null) {
+            tests = tests.stream()
+                         .filter(test -> testIds.contains(test.getId()))
+                         .collect(Collectors.toList());
+        }
+
+        if (statuses != null) {
+            tests = tests.stream()
+                         .filter(test -> statuses.contains(test.getStatus()))
+                         .collect(Collectors.toList());
+        }
 
         return tests.stream()
                     .map(test -> mapper.map(test, TestDTO.class))
