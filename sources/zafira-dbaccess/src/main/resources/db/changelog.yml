@@ -175,3 +175,14 @@ databaseChangeLog:
             path: changeset/016_add_test_uid_column.sql
             relativeToChangelogFile: true
             splitStatements: false
+  - changeSet:
+      id: 016_add_test_sessions_permissions
+      validCheckSum: ANY
+      labels: stable
+      author: itsvirko
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: changeset/016_add_test_sessions_permissions.sql
+            relativeToChangelogFile: true
+            splitStatements: false
